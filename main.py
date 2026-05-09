@@ -6,7 +6,12 @@ import requests
 import json
 import uuid
 import re
+import os
+from dotenv import load_dotenv
 from utils import load_embeddings, get_query_embedding, retrieve_relevant_chunks, generate_answer
+
+# Load environment variables from .env file
+load_dotenv()
 
 app = FastAPI()
 
@@ -18,7 +23,11 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-SERPER_API_KEY = "b47551808727017e2b2de13594c86df75eee9a06"
+# Load API keys from environment variables
+SERPER_API_KEY = os.getenv("SERPER_API_KEY")
+if not SERPER_API_KEY:
+    raise ValueError("SERPER_API_KEY not found in environment variables. Please set it in .env file.")
+
 EMBEDDINGS_FILE = "embeddings.npy"
 
 conversation_store = {}
